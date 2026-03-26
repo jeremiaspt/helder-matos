@@ -16,13 +16,18 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Campos obrigatórios em falta" })
     }
 
+    // gerar número de ticket
+    const ticketId = "TK-" + Date.now().toString().slice(-6)
+
+    // EMAIL PARA TI
     await resend.emails.send({
-      from: "Assistência <onboarding@resend.dev>",
+      from: "Assistência <noreply@kpax.stream>",
       to: process.env.EMAIL,
-      subject: "Novo pedido de assistência",
+      subject: `Novo pedido ${ticketId}`,
       html: `
         <h2>Novo pedido de assistência</h2>
 
+        <b>Ticket:</b> ${ticketId}<br>
         <b>Nome:</b> ${name}<br>
         <b>Telefone:</b> ${phone}<br>
         <b>Email:</b> ${email || "não indicado"}<br>
@@ -32,6 +37,51 @@ export default async function handler(req, res) {
         <p>${description}</p>
       `
     })
+
+    // EMAIL DE CONFIRMAÇÃO PARA O CLIENTE
+    if (email) {
+
+      await resend.emails.send({
+        from: "Assistência <noreply@kpax.stream>",
+        to: email,
+        subject: `Recebemos o seu pedido (${ticketId})`,
+        html: `
+          <h2>Pedido recebido</h2>
+
+          Obrigado pelo seu contacto.
+
+          O seu pedido foi registado com o número:
+
+          <b>${ticketId}</b>
+
+          Entraremos em contacto brevemente.
+
+          <hr>
+
+          <b>Descrição enviada:</b>
+
+          <p>${description}</p>
+        `
+      })
+
+    }
+
+    // NOTIFICAÇÃO WHATSAPP
+    if(process.env.WHATSAPP_PHONE && process.env.WHATSAPP_KEY){
+
+      const message = encodeURIComponent(
+`Novo pedido ${ticketId}
+
+Nome: ${name}
+Telefone: ${phone}
+Localidade: ${city}`
+      )
+
+      await fetch(
+`https://api.callmebot.com/whatsapp.php?phone=${process.env.WHATSAPP_PHONE}&text=${message}&apikey=${process.env.WHATSAPP_KEY}`
+      )
+
+    }
 
     return res.status(200).json({ status: "ok" })
 
