@@ -4,7 +4,14 @@ const nodemailer = require("nodemailer")
 
 const app = express()
 
-app.use(cors())
+app.use(cors({
+ origin: "*",
+ methods: ["GET","POST","OPTIONS"],
+ allowedHeaders: ["Content-Type"]
+}))
+
+app.options('*', cors())
+
 app.use(express.json())
 
 app.post("/ticket", async (req,res)=>{
