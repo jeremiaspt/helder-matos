@@ -1,57 +1,44 @@
 const express = require("express")
 const cors = require("cors")
-const nodemailer = require("nodemailer")
+const { Resend } = require("resend")
 
 const app = express()
 
-app.use(cors({
- origin: "*",
- methods: ["GET","POST","OPTIONS"],
- allowedHeaders: ["Content-Type"]
-}))
+const resend = new Resend(process.env.RESEND_API_KEY)
 
-app.options('*', cors())
-
+app.use(cors())
 app.use(express.json())
 
 app.post("/ticket", async (req,res)=>{
-
- console.log("Pedido recebido:", req.body)
 
  const {name,phone,email,city,description} = req.body
 
  try{
 
- const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth:{
-   user: process.env.EMAIL,
-   pass: process.env.PASS
-  }
- })
+ await resend.emails.send({
 
- await transporter.sendMail({
+ from: "Assistência <onboarding@resend.dev>",
+ to: process.env.EMAIL,
 
-  from:process.env.EMAIL,
-  to:process.env.EMAIL,
-  subject:"Novo pedido de assistência",
+ subject:"Novo pedido de assistência",
 
-  text:`
-Nome: ${name}
-Telefone: ${phone}
-Email: ${email}
-Localidade: ${city}
+ html:`
+ <h2>Novo pedido</h2>
 
-Descrição:
-${description}
-`
+ Nome: ${name}<br>
+ Telefone: ${phone}<br>
+ Email: ${email}<br>
+ Localidade: ${city}<br>
+
+ <p>${description}</p>
+ `
  })
 
  res.json({status:"ok"})
 
  }catch(err){
 
- console.log("ERRO EMAIL:", err)
+ console.log(err)
 
  res.status(500).json({error:"erro envio email"})
 
@@ -59,8 +46,4 @@ ${description}
 
 })
 
-const port = process.env.PORT || 3000
-
-app.listen(port,()=>{
- console.log("Servidor iniciado")
-})
+app.listen(process.env.PORT || 3000)
