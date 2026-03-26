@@ -44,6 +44,8 @@ accept="image/png,image/jpeg,image/webp"
 multiple
 class="w-full border p-2 mb-3">
 
+<div id="preview" class="grid grid-cols-3 gap-2 mb-3"></div>
+
 <textarea class="w-full border p-2 mb-3"
 placeholder="Descrição do problema"
 name="description"
@@ -125,6 +127,36 @@ form.addEventListener("submit", async (e)=>{
    form.reset()
  }else{
    document.getElementById("msg").innerText="Erro ao enviar pedido."
+ }
+
+})
+
+const photoInput = document.getElementById("photos")
+const preview = document.getElementById("preview")
+
+photoInput.addEventListener("change", () => {
+
+ preview.innerHTML = ""
+
+ const files = photoInput.files
+
+ for(const file of files){
+
+  const reader = new FileReader()
+
+  reader.onload = (e)=>{
+
+   const img = document.createElement("img")
+
+   img.src = e.target.result
+   img.className = "w-full h-24 object-cover rounded"
+
+   preview.appendChild(img)
+
+  }
+
+  reader.readAsDataURL(file)
+
  }
 
 })

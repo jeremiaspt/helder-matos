@@ -25,6 +25,18 @@ export default async function handler(req, res) {
 
       imagesHtml = `
         <h3>Fotografias</h3>
+        <div>
+         ${images.map(img => `
+            <img src="${img}" style="max-width:300px;margin-bottom:10px;border-radius:6px;">
+          `).join("")}
+        </div>
+      `
+    }
+
+    if(images && images.length){
+
+      imagesHtml = `
+        <h3>Fotografias</h3>
         ${images.map(img => `<p><a href="${img}">${img}</a></p>`).join("")}
         `
     }
