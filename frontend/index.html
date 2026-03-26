@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt">
-
 <head>
 
 <meta charset="UTF-8">
@@ -59,18 +58,27 @@ form.addEventListener("submit", async (e)=>{
 
  const data = Object.fromEntries(new FormData(form))
 
+ try{
+
  const res = await fetch("https://helder-matos-production.up.railway.app/ticket",{
- method:"POST",
- headers:{
-  "Content-Type":"application/json"
- },
- body:JSON.stringify(data)
+   method:"POST",
+   headers:{
+     "Content-Type":"application/json"
+   },
+   body:JSON.stringify(data)
  })
 
  if(res.ok){
-  document.getElementById("msg").innerText="Pedido enviado!"
+   document.getElementById("msg").innerText="Pedido enviado com sucesso!"
+   form.reset()
  }else{
-  document.getElementById("msg").innerText="Erro no envio."
+   document.getElementById("msg").innerText="Erro ao enviar pedido."
+ }
+
+ }catch(err){
+
+   document.getElementById("msg").innerText="Erro de ligação ao servidor."
+
  }
 
 })
@@ -78,5 +86,4 @@ form.addEventListener("submit", async (e)=>{
 </script>
 
 </body>
-
 </html>
