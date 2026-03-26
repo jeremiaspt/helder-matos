@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
 
 <meta charset="UTF-8">
@@ -20,7 +21,7 @@ Assistência Técnica
 </h1>
 
 <p class="text-center mb-6">
-Electricidade e Piscinas
+Electricidade e Manutenção de Piscinas
 </p>
 
 <form id="ticketForm" class="bg-white p-4 rounded shadow">
@@ -58,9 +59,7 @@ form.addEventListener("submit", async (e)=>{
 
  const data = Object.fromEntries(new FormData(form))
 
- try{
-
- const res = await fetch("https://helder-matos-production.up.railway.app/ticket",{
+ const res = await fetch("/api/ticket",{
    method:"POST",
    headers:{
      "Content-Type":"application/json"
@@ -73,12 +72,6 @@ form.addEventListener("submit", async (e)=>{
    form.reset()
  }else{
    document.getElementById("msg").innerText="Erro ao enviar pedido."
- }
-
- }catch(err){
-
-   document.getElementById("msg").innerText="Erro de ligação ao servidor."
-
  }
 
 })
