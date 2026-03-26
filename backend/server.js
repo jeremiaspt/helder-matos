@@ -11,11 +11,13 @@ app.use(express.json())
 
 app.post("/ticket", async (req,res)=>{
 
+ console.log("BODY:",req.body)
+
  const {name,phone,email,city,description} = req.body
 
  try{
 
- await resend.emails.send({
+ const response = await resend.emails.send({
 
  from: "Assistência <onboarding@resend.dev>",
  to: process.env.EMAIL,
@@ -34,11 +36,13 @@ app.post("/ticket", async (req,res)=>{
  `
  })
 
+ console.log("EMAIL RESPONSE:",response)
+
  res.json({status:"ok"})
 
  }catch(err){
 
- console.log(err)
+ console.log("EMAIL ERROR:",err)
 
  res.status(500).json({error:"erro envio email"})
 
