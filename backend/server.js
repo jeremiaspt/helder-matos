@@ -16,6 +16,8 @@ app.use(express.json())
 
 app.post("/ticket", async (req,res)=>{
 
+ console.log("Pedido recebido:", req.body)
+
  const {name,phone,email,city,description} = req.body
 
  try{
