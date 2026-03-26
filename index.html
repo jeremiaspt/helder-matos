@@ -34,6 +34,16 @@ Electricidade e Manutenção de Piscinas
 
 <input class="w-full border p-2 mb-3" placeholder="Localidade" name="city" required>
 
+<label class="block mb-1">Fotografias (até 5)</label>
+
+<input
+type="file"
+id="photos"
+name="photos"
+accept="image/png,image/jpeg,image/webp"
+multiple
+class="w-full border p-2 mb-3">
+
 <textarea class="w-full border p-2 mb-3"
 placeholder="Descrição do problema"
 name="description"
@@ -57,14 +67,57 @@ form.addEventListener("submit", async (e)=>{
 
  e.preventDefault()
 
- const data = Object.fromEntries(new FormData(form))
+ const formData = new FormData(form)
+
+ const files = document.getElementById("photos").files
+
+ if(files.length > 5){
+  alert("Pode enviar no máximo 5 fotografias.")
+  return
+ }
+
+ for(const file of files){
+
+  if(file.size > 5 * 1024 * 1024){
+   alert("Cada imagem deve ter no máximo 5MB.")
+   return
+  }
+
+ }
+
+ let imageUrls = []
+
+ for(const file of files){
+
+  const data = new FormData()
+
+  data.append("file", file)
+  data.append("upload_preset", "tickets")
+
+  const res = await fetch(
+   "https://api.cloudinary.com/v1_1/djrlckujy/image/upload",
+   {
+    method:"POST",
+    body:data
+   }
+  )
+
+  const json = await res.json()
+
+  imageUrls.push(json.secure_url)
+
+ }
+
+ const body = Object.fromEntries(formData)
+
+ body.images = imageUrls
 
  const res = await fetch("/api/ticket",{
    method:"POST",
    headers:{
      "Content-Type":"application/json"
    },
-   body:JSON.stringify(data)
+   body:JSON.stringify(body)
  })
 
  if(res.ok){

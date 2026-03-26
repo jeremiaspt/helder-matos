@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   try {
 
-    const { name, phone, email, city, description } = req.body
+    const { name, phone, email, city, description, images } = req.body
 
     if (!name || !phone || !city || !description) {
       return res.status(400).json({ error: "Campos obrigatórios em falta" })
@@ -18,6 +18,16 @@ export default async function handler(req, res) {
 
     // gerar número de ticket
     const ticketId = "TK-" + Date.now().toString().slice(-6)
+    
+    let imagesHtml = ""
+
+    if(images && images.length){
+
+      imagesHtml = `
+        <h3>Fotografias</h3>
+        ${images.map(img => `<p><a href="${img}">${img}</a></p>`).join("")}
+        `
+    }
 
     // EMAIL PARA TI
     await resend.emails.send({
@@ -35,6 +45,8 @@ export default async function handler(req, res) {
 
         <b>Descrição:</b>
         <p>${description}</p>
+
+        ${imagesHtml}
       `
     })
 
