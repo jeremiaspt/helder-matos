@@ -70,11 +70,13 @@ export default async function handler(req, res) {
     if(process.env.WHATSAPP_PHONE && process.env.WHATSAPP_KEY){
 
       const message = encodeURIComponent(
-`Novo pedido ${ticketId}
+        `🔧 Novo pedido ${ticketId}
 
-Nome: ${name}
-Telefone: ${phone}
-Localidade: ${city}`
+        👤 ${name}
+        📞 ${phone}
+        📍 ${city}
+
+        📝 ${description.substring(0,120)}`
       )
 
       await fetch(
