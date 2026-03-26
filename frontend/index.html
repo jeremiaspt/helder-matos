@@ -60,18 +60,18 @@ form.addEventListener("submit", async (e)=>{
  const data = Object.fromEntries(new FormData(form))
 
  const res = await fetch("https://helder-matos-production.up.railway.app/ticket",{
-
  method:"POST",
-
  headers:{
   "Content-Type":"application/json"
  },
-
  body:JSON.stringify(data)
-
  })
 
- document.getElementById("msg").innerText="Pedido enviado!"
+ if(res.ok){
+  document.getElementById("msg").innerText="Pedido enviado!"
+ }else{
+  document.getElementById("msg").innerText="Erro no envio."
+ }
 
 })
 
