@@ -44,6 +44,26 @@ Gestão de Tickets
 
 </div>
 
+<div class="flex gap-3 mb-4">
+
+<button onclick="showAbertos()" class="bg-blue-500 text-white px-3 py-1 rounded">
+Abertos
+</button>
+
+<button onclick="showPendentes()" class="bg-yellow-500 text-white px-3 py-1 rounded">
+Pendentes
+</button>
+
+<button onclick="showResolvidos()" class="bg-green-600 text-white px-3 py-1 rounded">
+Resolvidos
+</button>
+
+<button onclick="showTodos()" class="bg-gray-600 text-white px-3 py-1 rounded">
+Todos
+</button>
+
+</div>
+
 <input
 id="search"
 placeholder="Pesquisar por nome ou telefone"
@@ -63,7 +83,9 @@ async function loadTickets(){
 
  tickets = await res.json()
 
- renderTickets(tickets)
+ renderTickets(
+  tickets.filter(t => t.Estado === "Aberto")
+ )
 
  dashboard()
 
@@ -76,8 +98,11 @@ function dashboard(){
  document.getElementById("open").innerText =
  tickets.filter(t => t.Estado === "Aberto").length
 
- document.getElementById("pending").innerText =
- tickets.filter(t => t.Estado === "Pendente").length
+ ddocument.getElementById("pending").innerText =
+ tickets.filter(t =>
+  t.Estado === "Respondido" ||
+  t.Estado === "Pendente"
+ ).length
 
  document.getElementById("closed").innerText =
  tickets.filter(t => t.Estado === "Resolvido").length
@@ -173,6 +198,39 @@ async function updateStatus(ticket,estado){
    estado
   })
  })
+
+}
+
+function showAbertos(){
+
+ renderTickets(
+  tickets.filter(t => t.Estado === "Aberto")
+ )
+
+}
+
+function showPendentes(){
+
+ renderTickets(
+  tickets.filter(t =>
+   t.Estado === "Respondido" ||
+   t.Estado === "Pendente"
+  )
+ )
+
+}
+
+function showResolvidos(){
+
+ renderTickets(
+  tickets.filter(t => t.Estado === "Resolvido")
+ )
+
+}
+
+function showTodos(){
+
+ renderTickets(tickets)
 
 }
 
