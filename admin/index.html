@@ -133,6 +133,17 @@ function dashboard(){
 
 }
 
+function statusColor(estado){
+
+ if(estado === "Aberto") return "border-l-4 border-blue-500"
+ if(estado === "Respondido") return "border-l-4 border-orange-400"
+ if(estado === "Pendente") return "border-l-4 border-yellow-400"
+ if(estado === "Resolvido") return "border-l-4 border-green-500"
+
+ return ""
+
+}
+
 function renderTickets(data){
 
  const container = document.getElementById("tickets")
@@ -159,7 +170,7 @@ function renderTickets(data){
 
  return `
 
- <div class="bg-white p-4 mb-4 rounded shadow">
+ <div class="bg-white p-4 mb-4 rounded shadow ${statusColor(t.Estado)}">
 
  <b>${t.Ticket}</b> - ${t.Nome}
 
@@ -173,7 +184,7 @@ function renderTickets(data){
 
  <div class="mt-2">
 
- <select id="estado-${t.Ticket}" class="border p-1">
+ <select id="estado-${t.Ticket}" class="border p-1 ${statusColor(t.Estado)}">
 
  <option ${t.Estado==="Aberto"?"selected":""}>Aberto</option>
  <option ${t.Estado==="Respondido"?"selected":""}>Respondido</option>
