@@ -156,9 +156,7 @@ function renderTickets(data){
 
  <div class="mt-2">
 
- <select
-  class="border p-1"
-  onchange="updateStatus('${t.Ticket}', this.value)">
+ <select class="border p-1">
 
  <option ${t.Estado==="Aberto"?"selected":""}>Aberto</option>
  <option ${t.Estado==="Respondido"?"selected":""}>Respondido</option>
@@ -220,21 +218,6 @@ document.getElementById("search").addEventListener("input", e => {
 })
 
 loadTickets()
-
-async function updateStatus(ticket,estado){
-
- await fetch("/api/updateTicket",{
-  method:"POST",
-  headers:{
-   "Content-Type":"application/json"
-  },
-  body:JSON.stringify({
-   ticket,
-   estado
-  })
- })
-
-}
 
 function showAbertos(){
 
