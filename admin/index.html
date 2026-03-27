@@ -83,6 +83,9 @@ Todos
 
 <script>
 
+let gallery = []
+let currentIndex = 0
+
 let tickets = []
 
 async function loadTickets(){
@@ -171,13 +174,13 @@ function renderTickets(data){
 
   const list = fotos.split("\n")
 
-  photos = list.map(img => `
+  photos = list.map((img,i) => `
  
-  <img
-  src="${img.replace('/upload/','/upload/w_300/')}"
-  onclick="openLightbox('${img}')"
-  onerror="this.style.display='none'"
-  class="w-24 md:w-32 rounded-lg shadow cursor-pointer hover:scale-105 transition">
+   <img
+   src="${img.replace('/upload/','/upload/w_300/')}"
+   onclick="openGallery(${JSON.stringify(list)}, ${i})"
+   onerror="this.style.display='none'"
+   class="w-24 md:w-32 rounded-lg shadow cursor-pointer hover:scale-105 transition">
 
   `).join("")
 
@@ -415,6 +418,75 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
  })
+
+})
+
+function openGallery(images, index){
+
+ gallery = images
+ currentIndex = index
+
+ openLightbox(gallery[currentIndex])
+
+}
+
+document.addEventListener("keydown", function(e){
+
+ if(document.getElementById("lightbox").classList.contains("hidden"))
+  return
+
+ if(e.key === "ArrowRight"){
+  nextImage()
+ }
+
+ if(e.key === "ArrowLeft"){
+  prevImage()
+ }
+
+})
+
+function nextImage(){
+
+ if(currentIndex < gallery.length - 1){
+  currentIndex++
+ }
+
+ openLightbox(gallery[currentIndex])
+
+}
+
+function prevImage(){
+
+ if(currentIndex > 0){
+  currentIndex--
+ }
+
+ openLightbox(gallery[currentIndex])
+
+}
+
+let startX = 0
+
+const lightbox = document.getElementById("lightbox")
+
+lightbox.addEventListener("touchstart", e => {
+ startX = e.touches[0].clientX
+})
+
+lightbox.addEventListener("touchend", e => {
+
+ let endX = e.changedTouches[0].clientX
+ let diff = startX - endX
+
+ if(Math.abs(diff) > 50){
+
+  if(diff > 0){
+   nextImage()
+  }else{
+   prevImage()
+  }
+
+ }
 
 })
 
