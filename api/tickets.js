@@ -20,6 +20,7 @@ export default async function handler(req,res){
  }
 
  const r = await fetch(process.env.SHEET_JSON)
+
  const data = await r.json()
 
  res.status(200).json(data)

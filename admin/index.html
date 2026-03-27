@@ -1,33 +1,158 @@
-<h1>Tickets</h1>
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin - Tickets</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="max-w-6xl mx-auto p-4">
+
+<h1 class="text-3xl font-bold mb-4">
+Gestão de Tickets
+</h1>
+
+<div class="grid grid-cols-4 gap-4 mb-6">
+
+<div class="bg-white p-4 rounded shadow">
+<b>Total</b>
+<div id="total"></div>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+<b>Abertos</b>
+<div id="open"></div>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+<b>Pendentes</b>
+<div id="pending"></div>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+<b>Resolvidos</b>
+<div id="closed"></div>
+</div>
+
+</div>
+
+<input
+id="search"
+placeholder="Pesquisar por nome ou telefone"
+class="w-full border p-2 mb-4">
 
 <div id="tickets"></div>
 
+</div>
+
 <script>
+
+let tickets = []
 
 async function loadTickets(){
 
  const res = await fetch("/api/tickets")
- const tickets = await res.json()
+
+ tickets = await res.json()
+
+ renderTickets(tickets)
+
+ dashboard()
+
+}
+
+function dashboard(){
+
+ document.getElementById("total").innerText = tickets.length
+
+ document.getElementById("open").innerText =
+ tickets.filter(t => t.Estado === "Aberto").length
+
+ document.getElementById("pending").innerText =
+ tickets.filter(t => t.Estado === "Pendente").length
+
+ document.getElementById("closed").innerText =
+ tickets.filter(t => t.Estado === "Resolvido").length
+
+}
+
+function renderTickets(data){
 
  const container = document.getElementById("tickets")
 
- container.innerHTML = tickets.map(t => `
+ container.innerHTML = data.map(t => {
+
+ let photos = ""
+
+ if(t.Fotos){
+
+ const list = t.Fotos.split("\n")
+
+ photos = list.map(img => `
  
-  <div style="border:1px solid #ccc;margin:10px;padding:10px">
-
-  <b>${t.Ticket}</b><br>
-  ${t.Nome}<br>
-  ${t.Telefone}<br>
-  ${t.Localidade}<br>
-
-  <p>${t.Descrição}</p>
-
-  </div>
+ <a href="${img}" target="_blank">
+ <img
+ src="${img.replace('/upload/','/upload/w_200/')}"
+ class="w-32 inline-block mr-2 mb-2 rounded">
+ </a>
 
  `).join("")
 
+ }
+
+ return `
+
+ <div class="bg-white p-4 mb-4 rounded shadow">
+
+ <b>${t.Ticket}</b> - ${t.Nome}
+
+ <div class="text-sm text-gray-600">
+ ${t.Telefone} | ${t.Localidade}
+ </div>
+
+ <p class="mt-2">${t.Descrição}</p>
+
+ <div class="mt-2">${photos}</div>
+
+ <div class="mt-2">
+
+ Estado:
+ <span class="font-bold">${t.Estado}</span>
+
+ </div>
+
+ </div>
+
+ `
+
+ }).join("")
+
 }
+
+document.getElementById("search").addEventListener("input", e => {
+
+ const q = e.target.value.toLowerCase()
+
+ const filtered = tickets.filter(t =>
+  t.Nome.toLowerCase().includes(q) ||
+  t.Telefone.includes(q)
+ )
+
+ renderTickets(filtered)
+
+})
 
 loadTickets()
 
 </script>
+
+</body>
+</html>
