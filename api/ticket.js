@@ -25,11 +25,14 @@ export default async function handler(req, res) {
 
       imagesHtml = `
         <h3>Fotografias</h3>
-        <div>
-         ${images.map(img => `
-            <img src="${img}" style="max-width:300px;margin-bottom:10px;border-radius:6px;">
-          `).join("")}
-        </div>
+        ${images.map(img => `
+          <p>
+            <a href="${img}">
+              <img src="${img}" style="max-width:300px;border-radius:6px;">
+            </a>
+          </p>
+          <p>${img}</p>
+        `).join("")}
       `
     }
 
