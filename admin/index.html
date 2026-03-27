@@ -93,19 +93,26 @@ async function loadTickets(){
 
 function dashboard(){
 
- document.getElementById("total").innerText = tickets.length
+ const total = tickets.length
 
- document.getElementById("open").innerText =
- tickets.filter(t => t.Estado === "Aberto").length
+ const abertos =
+ tickets.filter(t => t.Estado === "Aberto")
 
- ddocument.getElementById("pending").innerText =
+ const pendentes =
  tickets.filter(t =>
   t.Estado === "Respondido" ||
   t.Estado === "Pendente"
- ).length
+ )
 
- document.getElementById("closed").innerText =
- tickets.filter(t => t.Estado === "Resolvido").length
+ const resolvidos =
+ tickets.filter(t =>
+  t.Estado === "Resolvido"
+ )
+
+ document.getElementById("total").innerText = total
+ document.getElementById("open").innerText = abertos.length
+ document.getElementById("pending").innerText = pendentes.length
+ document.getElementById("closed").innerText = resolvidos.length
 
 }
 
@@ -152,6 +159,27 @@ function renderTickets(data){
  <select
   class="border p-1"
   onchange="updateStatus('${t.Ticket}', this.value)">
+
+ 
+ <textarea
+  id="obs-${t.Ticket}"
+  class="border p-2 w-full mt-2"
+  placeholder="Observação"></textarea>
+
+ <button
+  class="bg-blue-500 text-white px-2 py-1 mt-2 rounded"
+  onclick="saveTicket('${t.Ticket}')">
+
+ Guardar
+
+ </button>
+
+ <div class="text-xs text-gray-500 mt-2">
+
+ Última atualização:
+ ${t["Última Atualização"] || "-"}
+
+ </div>
 
  <option ${t.Estado==="Aberto"?"selected":""}>Aberto</option>
  <option ${t.Estado==="Respondido"?"selected":""}>Respondido</option>
@@ -231,6 +259,33 @@ function showResolvidos(){
 function showTodos(){
 
  renderTickets(tickets)
+
+}
+
+
+async function saveTicket(ticket){
+
+ const estado =
+ document.querySelector(
+  `select[onchange*="${ticket}"]`
+ ).value
+
+ const obs =
+ document.getElementById(`obs-${ticket}`).value
+
+ await fetch("/api/updateTicket",{
+  method:"POST",
+  headers:{
+   "Content-Type":"application/json"
+  },
+  body:JSON.stringify({
+   ticket,
+   estado,
+   obs
+  })
+ })
+
+ alert("Ticket atualizado")
 
 }
 
