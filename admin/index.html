@@ -372,10 +372,22 @@ function openLightbox(src){
 
 }
 
-document.getElementById("lightbox").addEventListener("click",(e)=>{
+const lightbox = document.getElementById("lightbox")
 
- if(e.target.id === "lightbox"){
-  e.currentTarget.classList.add("hidden")
+lightbox.onclick = function(e){
+
+ // se clicares no fundo fecha
+ if(e.target === lightbox){
+  lightbox.classList.add("hidden")
+ }
+
+}
+
+// fechar com ESC
+document.addEventListener("keydown", function(e){
+
+ if(e.key === "Escape"){
+  lightbox.classList.add("hidden")
  }
 
 })
