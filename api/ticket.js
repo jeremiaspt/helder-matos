@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     // gerar número de ticket
     const ticketId = "TK-" + Date.now().toString().slice(-6)
 
-    await fetch(process.env.GOOGLE_SHEET_WEBHOOK,{
+    await fetch(process.env.SHEET_WEBHOOK,{
       method:"POST",
       headers:{
         "Content-Type":"application/json"

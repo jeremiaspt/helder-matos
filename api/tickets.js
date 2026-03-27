@@ -19,7 +19,7 @@ export default async function handler(req,res){
   return res.status(401).send("Access denied")
  }
 
- const r = await fetch(process.env.SHEET_JSON)
+ const r = await fetch(process.env.SHEET_WEBHOOK)
 
  const data = await r.json()
 
