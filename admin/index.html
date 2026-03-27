@@ -160,7 +160,13 @@ function renderTickets(data){
   class="border p-1"
   onchange="updateStatus('${t.Ticket}', this.value)">
 
- 
+ <option ${t.Estado==="Aberto"?"selected":""}>Aberto</option>
+ <option ${t.Estado==="Respondido"?"selected":""}>Respondido</option>
+ <option ${t.Estado==="Pendente"?"selected":""}>Pendente</option>
+ <option ${t.Estado==="Resolvido"?"selected":""}>Resolvido</option>
+
+ </select>
+
  <textarea
   id="obs-${t.Ticket}"
   class="border p-2 w-full mt-2"
@@ -180,13 +186,6 @@ function renderTickets(data){
  ${t["Última Atualização"] || "-"}
 
  </div>
-
- <option ${t.Estado==="Aberto"?"selected":""}>Aberto</option>
- <option ${t.Estado==="Respondido"?"selected":""}>Respondido</option>
- <option ${t.Estado==="Pendente"?"selected":""}>Pendente</option>
- <option ${t.Estado==="Resolvido"?"selected":""}>Resolvido</option>
-
- </select>
 
  </div>
 
