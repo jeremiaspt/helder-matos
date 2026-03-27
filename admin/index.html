@@ -276,13 +276,21 @@ function renderTickets(data){
 
 document.getElementById("search").addEventListener("input", e => {
 
- const q = e.target.value.toLowerCase()
+ const q = e.target.value.toLowerCase().trim()
 
- const filtered = tickets.filter(t =>
-  t.Nome.toLowerCase().includes(q) ||
-  t.Telefone.includes(q) ||
-  t.Ticket.toLowerCase().includes(q)
- )
+ const filtered = tickets.filter(t => {
+
+  const nome = (t.Nome || "").toLowerCase()
+  const telefone = (t.Telefone || "").toString()
+  const ticket = (t.Ticket || "").toLowerCase()
+
+  return (
+   nome.includes(q) ||
+   telefone.includes(q) ||
+   ticket.includes(q)
+  )
+
+ })
 
  renderTickets(filtered)
 
