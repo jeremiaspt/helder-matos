@@ -124,8 +124,16 @@ function renderTickets(data){
 
  <div class="mt-2">
 
- Estado:
- <span class="font-bold">${t.Estado}</span>
+ <select
+  class="border p-1"
+  onchange="updateStatus('${t.Ticket}', this.value)">
+
+ <option ${t.Estado==="Aberto"?"selected":""}>Aberto</option>
+ <option ${t.Estado==="Respondido"?"selected":""}>Respondido</option>
+ <option ${t.Estado==="Pendente"?"selected":""}>Pendente</option>
+ <option ${t.Estado==="Resolvido"?"selected":""}>Resolvido</option>
+
+ </select>
 
  </div>
 
@@ -143,7 +151,8 @@ document.getElementById("search").addEventListener("input", e => {
 
  const filtered = tickets.filter(t =>
   t.Nome.toLowerCase().includes(q) ||
-  t.Telefone.includes(q)
+  t.Telefone.includes(q) ||
+  t.Ticket.toLowerCase().includes(q)
  )
 
  renderTickets(filtered)
@@ -151,6 +160,21 @@ document.getElementById("search").addEventListener("input", e => {
 })
 
 loadTickets()
+
+async function updateStatus(ticket,estado){
+
+ await fetch("/api/updateTicket",{
+  method:"POST",
+  headers:{
+   "Content-Type":"application/json"
+  },
+  body:JSON.stringify({
+   ticket,
+   estado
+  })
+ })
+
+}
 
 </script>
 
