@@ -372,22 +372,26 @@ function openLightbox(src){
 
 }
 
-const lightbox = document.getElementById("lightbox")
-
-lightbox.onclick = function(e){
-
- // se clicares no fundo fecha
- if(e.target === lightbox){
-  lightbox.classList.add("hidden")
- }
-
+function closeLightbox(){
+ document.getElementById("lightbox").classList.add("hidden")
 }
 
-// fechar com ESC
+document.addEventListener("click", function(e){
+
+ const box = document.getElementById("lightbox")
+
+ if(!box) return
+
+ if(e.target.id === "lightbox"){
+  closeLightbox()
+ }
+
+})
+
 document.addEventListener("keydown", function(e){
 
  if(e.key === "Escape"){
-  lightbox.classList.add("hidden")
+  closeLightbox()
  }
 
 })
