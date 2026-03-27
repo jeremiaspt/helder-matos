@@ -1,0 +1,33 @@
+<h1>Tickets</h1>
+
+<div id="tickets"></div>
+
+<script>
+
+async function loadTickets(){
+
+ const res = await fetch("/api/tickets")
+ const tickets = await res.json()
+
+ const container = document.getElementById("tickets")
+
+ container.innerHTML = tickets.map(t => `
+ 
+  <div style="border:1px solid #ccc;margin:10px;padding:10px">
+
+  <b>${t.Ticket}</b><br>
+  ${t.Nome}<br>
+  ${t.Telefone}<br>
+  ${t.Localidade}<br>
+
+  <p>${t.Descrição}</p>
+
+  </div>
+
+ `).join("")
+
+}
+
+loadTickets()
+
+</script>
