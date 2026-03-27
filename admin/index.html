@@ -391,14 +391,6 @@ document.addEventListener("click", function(e){
 
 })
 
-document.addEventListener("keydown", function(e){
-
- if(e.key === "Escape"){
-  closeLightbox()
- }
-
-})
-
 document.addEventListener("DOMContentLoaded", () => {
 
  const lightbox = document.getElementById("lightbox")
@@ -465,28 +457,33 @@ function prevImage(){
 
 }
 
-let startX = 0
+document.addEventListener("DOMContentLoaded", () => {
 
-const lightbox = document.getElementById("lightbox")
+ let startX = 0
+ const lightbox = document.getElementById("lightbox")
 
-lightbox.addEventListener("touchstart", e => {
- startX = e.touches[0].clientX
-})
+ if(!lightbox) return
 
-lightbox.addEventListener("touchend", e => {
+ lightbox.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX
+ })
 
- let endX = e.changedTouches[0].clientX
- let diff = startX - endX
+ lightbox.addEventListener("touchend", e => {
 
- if(Math.abs(diff) > 50){
+  let endX = e.changedTouches[0].clientX
+  let diff = startX - endX
 
-  if(diff > 0){
-   nextImage()
-  }else{
-   prevImage()
+  if(Math.abs(diff) > 50){
+
+   if(diff > 0){
+    nextImage()
+   } else {
+    prevImage()
+   }
+
   }
 
- }
+ })
 
 })
 
