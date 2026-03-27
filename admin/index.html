@@ -165,19 +165,22 @@ function renderTickets(data){
 
  let photos = ""
 
- if(t.Fotos){
+ const fotos = t.Fotos || t.Foto || ""
 
- const list = t.Fotos.split("\n")
+ if(fotos){
 
- photos = list.map(img => `
+  const list = fotos.split("\n")
 
- <a href="${img}" target="_blank">
- <img
- src="${img.replace('/upload/','/upload/w_300/')}"
- class="w-24 md:w-32 inline-block mr-2 mb-2 rounded-lg shadow">
- </a>
+  photos = list.map(img => `
+ 
+  <a href="${img}" target="_blank">
+  <img
+  src="${img.replace('/upload/','/upload/w_300/')}"
 
- `).join("")
+  class="w-24 md:w-32 inline-block mr-2 mb-2 rounded-lg shadow">
+  </a>
+
+  `).join("")
 
  }
 
@@ -200,6 +203,10 @@ function renderTickets(data){
  <div class="text-gray-500 text-sm">
  ${t.Localidade}
  </div>
+
+ <p class="text-gray-700 text-sm mt-2">
+ ${t.Descricao || t.Descrição || ""}
+ </p>
 
  </div>
 
