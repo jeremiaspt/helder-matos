@@ -173,13 +173,11 @@ function renderTickets(data){
 
   photos = list.map(img => `
  
-  <a href="${img}" target="_blank">
   <img
   src="${img.replace('/upload/','/upload/w_300/')}"
   onclick="openLightbox('${img}')"
   onerror="this.style.display='none'"
-  class="w-24 md:w-32 inline-block mr-2 mb-2 rounded-lg shadow cursor-pointer hover:scale-105 transition">
-  </a>
+  class="w-24 md:w-32 rounded-lg shadow cursor-pointer hover:scale-105 transition">
 
   `).join("")
 
@@ -364,7 +362,7 @@ async function saveTicket(ticket){
 
  }
 
- function openLightbox(src){
+function openLightbox(src){
 
  const box = document.getElementById("lightbox")
  const img = document.getElementById("lightbox-img")
@@ -374,14 +372,18 @@ async function saveTicket(ticket){
 
 }
 
-document.getElementById("lightbox").addEventListener("click",()=>{
- document.getElementById("lightbox").classList.add("hidden")
+document.getElementById("lightbox").addEventListener("click",(e)=>{
+
+ if(e.target.id === "lightbox"){
+  e.currentTarget.classList.add("hidden")
+ }
+
 })
 
 </script>
 
 <div id="lightbox"
-class="fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50">
+class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
 
 <img id="lightbox-img"
 class="max-w-[90%] max-h-[90%] rounded shadow-lg">
