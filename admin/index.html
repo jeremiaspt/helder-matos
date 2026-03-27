@@ -172,7 +172,7 @@ function renderTickets(data){
 
  if(fotos){
 
-  const list = fotos.split("\n")
+  const list = fotos.split("\n").filter(x => x.trim())
 
   photos = list.map((img,i) => `
  
@@ -370,9 +370,12 @@ function openLightbox(src){
 
  const box = document.getElementById("lightbox")
  const img = document.getElementById("lightbox-img")
+ const counter = document.getElementById("lightbox-counter")
 
  img.src = src
  box.classList.remove("hidden")
+
+ counter.innerText = (currentIndex + 1) + " / " + gallery.length
 
 }
 
@@ -500,10 +503,22 @@ function openGalleryFromElement(el){
 </script>
 
 <div id="lightbox"
-class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
+class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50 cursor-zoom-out">
+
+<div class="relative">
 
 <img id="lightbox-img"
-class="max-w-[90%] max-h-[90%] rounded shadow-lg">
+class="max-w-[90vw] max-h-[90vh] rounded shadow-lg cursor-auto">
+
+<div id="lightbox-counter"
+class="absolute bottom-3 left-1/2 -translate-x-1/2
+bg-black/60 text-white text-sm px-3 py-1 rounded-full">
+
+1 / 1
+
+</div>
+
+</div>
 
 </div>
 
