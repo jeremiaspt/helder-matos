@@ -79,15 +79,32 @@ let tickets = []
 
 async function loadTickets(){
 
- const res = await fetch("/api/tickets")
+ try{
 
- tickets = await res.json()
+  const res = await fetch("/api/tickets")
 
- renderTickets(
-  tickets.filter(t => t.Estado === "Aberto")
- )
+  if(!res.ok){
+   throw new Error("Erro API")
+  }
 
- dashboard()
+  tickets = await res.json()
+
+  if(!Array.isArray(tickets)){
+   console.log("Resposta inesperada:",tickets)
+   tickets = []
+  }
+
+  renderTickets(
+   tickets.filter(t => t.Estado === "Aberto")
+  )
+
+  dashboard()
+
+ }catch(err){
+
+  console.error("Erro ao carregar tickets:",err)
+
+ }
 
 }
 
