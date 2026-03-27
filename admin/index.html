@@ -178,7 +178,9 @@ function renderTickets(data){
  
    <img
    src="${img.replace('/upload/','/upload/w_300/')}"
-   onclick="openGallery(${JSON.stringify(list)}, ${i})"
+   data-images='${JSON.stringify(list)}'
+   data-index="${i}"
+   onclick="openGalleryFromElement(this)"
    onerror="this.style.display='none'"
    class="w-24 md:w-32 rounded-lg shadow cursor-pointer hover:scale-105 transition">
 
@@ -333,7 +335,6 @@ function showTodos(){
 
 }
 
-
 async function saveTicket(ticket){
 
  const estado =
@@ -486,6 +487,15 @@ document.addEventListener("DOMContentLoaded", () => {
  })
 
 })
+
+function openGalleryFromElement(el){
+
+ gallery = JSON.parse(el.dataset.images)
+ currentIndex = parseInt(el.dataset.index)
+
+ openLightbox(gallery[currentIndex])
+
+}
 
 </script>
 
