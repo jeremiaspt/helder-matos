@@ -156,7 +156,7 @@ function renderTickets(data){
 
  <div class="mt-2">
 
- <select class="border p-1">
+ <select id="estado-${t.Ticket}" class="border p-1">
 
  <option ${t.Estado==="Aberto"?"selected":""}>Aberto</option>
  <option ${t.Estado==="Respondido"?"selected":""}>Respondido</option>
@@ -256,9 +256,7 @@ function showTodos(){
 async function saveTicket(ticket){
 
  const estado =
- document.querySelector(
-  `select[onchange*="${ticket}"]`
- ).value
+ document.getElementById(`estado-${ticket}`).value
 
  const obs =
  document.getElementById(`obs-${ticket}`).value
